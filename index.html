@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo - School Sandbox</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input[type="email"],
+        input[type="text"],
+        input[type="password"],
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="email"]:focus,
+        input[type="text"]:focus,
+        input[type="password"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .tipo-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .tipo-btn {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+
+        .tipo-btn:hover {
+            border-color: #667eea;
+        }
+
+        .tipo-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .info-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 24px;
+            display: flex;
+            gap: 10px;
+            font-size: 13px;
+            color: #856404;
+        }
+
+        .info-box::before {
+            content: "ℹ";
+            font-weight: bold;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .alert {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .alert.success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .alert.error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        .user-list {
+            margin-top: 40px;
+            padding-top: 40px;
+            border-top: 2px solid #eee;
+        }
+
+        .user-list h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        .user-item {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-email {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .user-type {
+            color: #666;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .user-type.pais {
+            color: #4CAF50;
+        }
+
+        .user-type.professor {
+            color: #2196F3;
+        }
+
+        .user-type.diretor {
+            color: #FF9800;
+        }
+
+        .user-type.aluno {
+            color: #9C27B0;
+        }
+
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            width: auto;
+        }
+
+        .delete-btn:hover {
+            background: #c82333;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #666;
+            font-size: 12px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .tipo-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 Painel Administrativo</h1>
+            <p>School Sandbox - Gerenciamento de Usuários</p>
+        </div>
+
+        <div id="alert" class="alert"></div>
+
+        <div class="info-box">
+            Alunos não terão acesso ao app. Use apenas para registro de dados.
+        </div>
+
+        <form id="userForm">
+            <div class="form-group">
+                <label for="email">Email *</label>
+                <input type="email" id="email" name="email" required placeholder="usuario@escola.com">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="nome">Nome</label>
+                    <input type="text" id="nome" name="nome" placeholder="João Silva">
+                </div>
+                <div class="form-group">
+                    <label for="senha">Senha *</label>
+                    <input type="password" id="senha" name="senha" required placeholder="••••••••">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Tipo de Usuário *</label>
+                <div class="tipo-grid">
+                    <button type="button" class="tipo-btn active" data-tipo="pais">👨‍👩‍👧 PAI/MÃE</button>
+                    <button type="button" class="tipo-btn" data-tipo="professor">👨‍🏫 PROFESSORES</button>
+                    <button type="button" class="tipo-btn" data-tipo="diretor">👔 DIRETORES</button>
+                    <button type="button" class="tipo-btn" data-tipo="aluno">📚 ALUNO</button>
+                </div>
+                <input type="hidden" id="tipo" name="tipo" value="pais">
+            </div>
+
+            <button type="submit" id="submitBtn">Criar Usuário</button>
+        </form>
+
+        <div class="user-list">
+            <h2>Usuários Registrados</h2>
+            <div id="usersList">
+                <p style="color: #999;">Carregando usuários...</p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>School Sandbox © 2026 | Painel de Administração</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SUPABASE_URL = 'https://epsaapndkjprufbfwfgl.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVwc2FhcG5ka2pwcnVmYmZ3ZmdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE4ODk1NDcsImV4cCI6MjA4NzQ2NTU0N30.Yz1LKHoLKZOJSxkMZPwOTKVmWhYnN2ZqsMQeoJerq6g';
+
+        const { createClient } = window.supabase;
+        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        const form = document.getElementById('userForm');
+        const emailInput = document.getElementById('email');
+        const nomeInput = document.getElementById('nome');
+        const senhaInput = document.getElementById('senha');
+        const tipoInput = document.getElementById('tipo');
+        const submitBtn = document.getElementById('submitBtn');
+        const alertDiv = document.getElementById('alert');
+        const usersList = document.getElementById('usersList');
+
+        // Seleção de tipo
+        document.querySelectorAll('.tipo-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.querySelectorAll('.tipo-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                tipoInput.value = btn.dataset.tipo;
+            });
+        });
+
+        // Carregar usuários
+        async function loadUsers() {
+            try {
+                const { data, error } = await supabase
+                    .from('profiles')
+                    .select('id, email, nome, tipo_usuario, created_at')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                if (!data || data.length === 0) {
+                    usersList.innerHTML = '<p style="color: #999;">Nenhum usuário criado yet.</p>';
+                    return;
+                }
+
+                usersList.innerHTML = data.map(user => `
+                    <div class="user-item">
+                        <div class="user-info">
+                            <div class="user-email">${user.email}</div>
+                            <div class="user-type ${user.tipo_usuario}">${formatType(user.tipo_usuario)}</div>
+                        </div>
+                        <button class="delete-btn" onclick="deleteUser('${user.id}')">Remover</button>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Erro ao carregar usuários:', error);
+                usersList.innerHTML = '<p style="color: #dc3545;">Erro ao carregar usuários.</p>';
+            }
+        }
+
+        function formatType(tipo) {
+            const types = {
+                'pais': '👨‍👩‍👧 PAI/MÃE',
+                'professor': '👨‍🏫 PROFESSORES',
+                'diretor': '👔 DIRETORES',
+                'aluno': '📚 ALUNO'
+            };
+            return types[tipo] || tipo;
+        }
+
+        function showAlert(message, type) {
+            alertDiv.textContent = message;
+            alertDiv.className = `alert show ${type}`;
+            setTimeout(() => {
+                alertDiv.classList.remove('show');
+            }, 5000);
+        }
+
+        // Criar usuário
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const email = emailInput.value.trim();
+            const nome = nomeInput.value.trim() || email.split('@')[0];
+            const senha = senhaInput.value;
+            const tipo = tipoInput.value;
+
+            if (!email || !senha) {
+                showAlert('Preencha email e senha', 'error');
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="spinner"></span>Criando...';
+
+            try {
+                const { data, error } = await supabase.auth.admin.createUser({
+                    email: email,
+                    password: senha,
+                    user_metadata: {
+                        nome: nome,
+                        tipo_usuario: tipo
+                    }
+                });
+
+                if (error) throw new Error(error.message);
+
+                // Trigger cria o profile automaticamente via handle_new_auth_user
+                emailInput.value = '';
+                nomeInput.value = '';
+                senhaInput.value = '';
+                tipoInput.value = 'pais';
+                document.querySelectorAll('.tipo-btn').forEach(b => b.classList.remove('active'));
+                document.querySelector('[data-tipo="pais"]').classList.add('active');
+
+                showAlert(`✓ Usuário ${email} criado com sucesso!`, 'success');
+                loadUsers();
+            } catch (error) {
+                console.error('Erro:', error);
+                showAlert(`Erro: ${error.message}`, 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Criar Usuário';
+            }
+        });
+
+        async function deleteUser(userId) {
+            if (!confirm('Tem certeza que quer remover este usuário?')) return;
+
+            try {
+                // Remover de auth (precisa de admin key ou rls adequada)
+                await supabase.auth.admin.deleteUser(userId);
+                showAlert('Usuário removido com sucesso', 'success');
+                loadUsers();
+            } catch (error) {
+                console.error('Erro ao remover:', error);
+                showAlert(`Erro ao remover: ${error.message}`, 'error');
+            }
+        }
+
+        // Carregar usuários ao abrir a página
+        loadUsers();
+    </script>
+</body>
+</html>
