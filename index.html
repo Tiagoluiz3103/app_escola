@@ -93,14 +93,22 @@
         }
 
         .tipo-btn {
-            padding: 12px;
-            border: 2px solid #ddd;
+            padding: 12px 8px;
+            border: 2px solid #333;
             border-radius: 8px;
             background: white;
+            color: #333;
             cursor: pointer;
             font-weight: 600;
-            font-size: 13px;
+            font-size: 12px;
             transition: all 0.3s;
+            white-space: normal;
+            word-wrap: break-word;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
         }
 
         .tipo-btn:hover {
@@ -108,9 +116,10 @@
         }
 
         .tipo-btn.active {
-            background: #667eea;
-            color: white;
-            border-color: #667eea;
+            background: transparent;
+            color: #000;
+            border-color: #000;
+            box-shadow: none;
         }
 
         .info-box {
@@ -299,7 +308,7 @@
     <div class="container">
         <div class="header">
             <h1>🎓 Painel Administrativo</h1>
-            <p>School Sandbox - Gerenciamento de Usuários</p>
+            <p>Gerenciamento de Usuários</p>
         </div>
 
         <div id="alert" class="alert"></div>
@@ -328,10 +337,10 @@
             <div class="form-group">
                 <label>Tipo de Usuário *</label>
                 <div class="tipo-grid">
-                    <button type="button" class="tipo-btn active" data-tipo="pais">👨‍👩‍👧 PAI/MÃE</button>
-                    <button type="button" class="tipo-btn" data-tipo="professor">👨‍🏫 PROFESSORES</button>
-                    <button type="button" class="tipo-btn" data-tipo="diretor">👔 DIRETORES</button>
-                    <button type="button" class="tipo-btn" data-tipo="aluno">📚 ALUNO</button>
+                    <button type="button" class="tipo-btn active" data-tipo="pais">PAI/MÃE</button>
+                    <button type="button" class="tipo-btn" data-tipo="professor">PROFESSOR</button>
+                    <button type="button" class="tipo-btn" data-tipo="diretor">DIRETOR</button>
+                    <button type="button" class="tipo-btn" data-tipo="aluno">ALUNO</button>
                 </div>
                 <input type="hidden" id="tipo" name="tipo" value="pais">
             </div>
@@ -339,12 +348,7 @@
             <button type="submit" id="submitBtn">Criar Usuário</button>
         </form>
 
-        <div class="user-list">
-            <h2>Usuários Registrados</h2>
-            <div id="usersList">
-                <p style="color: #999;">Carregando usuários...</p>
-            </div>
-        </div>
+        
 
         <div class="footer">
             <p>School Sandbox © 2026 | Painel de Administração</p>
@@ -410,10 +414,10 @@
 
         function formatType(tipo) {
             const types = {
-                'pais': '👨‍👩‍👧 PAI/MÃE',
-                'professor': '👨‍🏫 PROFESSORES',
-                'diretor': '👔 DIRETORES',
-                'aluno': '📚 ALUNO'
+                'pais': 'PAI/MÃE',
+                'professor': 'PROFESSOR',
+                'diretor': 'DIRETOR',
+                'aluno': 'ALUNO'
             };
             return types[tipo] || tipo;
         }
